@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Master - Catálogo Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           RESET E ESTILOS GERAIS
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #ffc107;
+            --primary-hover: #e0a800;
+            --dark: #121212;
+            --dark-card: #1e1e1e;
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+            --whatsapp: #25d366;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        /* ==========================================================================
+           HEADER & NAV
+           ========================================================================== */
+        header {
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(18,18,18,1) 100%);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        /* ==========================================================================
+           CARROSSEL DE DESTAQUES (4 PRODUTOS)
+           ========================================================================== */
+        .carousel-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .carousel-wrapper {
+            overflow: hidden;
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .carousel-item { min-width: 50%; }
+        }
+        @media (min-width: 1024px) {
+            .carousel-item { min-width: 25%; }
+        }
+
+        .featured-card {
+            background: var(--dark-card);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+            position: relative;
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .featured-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .featured-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-body h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .card-body p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Controles do Carrossel */
+        .carousel-btn {
+            position: absolute;
+            top: 55%;
+            transform: translateY(-50%);
+            background: rgba(255, 193, 7, 0.8);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: var(--dark);
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.3s;
+        }
+
+        .carousel-btn:hover { background: var(--primary); }
+        .prev-btn { left: 0px; }
+        .next-btn { right: 0px; }
+
+        /* ==========================================================================
+           FILTROS E BUSCA
+           ========================================================================== */
+        .search-filter-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .search-filter-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background: var(--dark-card);
+            border: 1px solid #333;
+            border-radius: 25px;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus { border-color: var(--primary); }
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .filter-buttons::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+
+        .filter-btn {
+            background: var(--dark-card);
+            border: 1px solid #333;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           CATÁLOGO / GRID DE PRODUTOS
+           ========================================================================== */
+        .catalog-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 25px;
+        }
+
+        @media (min-width: 576px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 992px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1200px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .product-card {
+            background: var(--dark-card);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #2a2a2a;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border-color: #444;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        /* ==========================================================================
+           BOTÃO FLUTUANTE WHATSAPP
+           ========================================================================== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: var(--whatsapp);
+            color: #fff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-float .tooltip {
+            visibility: hidden;
+            width: 140px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            right: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .whatsapp-float:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 40px;
+            border-top: 1px solid #2a2a2a;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>Burger Master</h1>
+            <p>O verdadeiro sabor artesanal matador de fome</p>
+        </div>
+    </header>
+
+    <section class="carousel-container">
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> Os Mais Pedidos</h2>
+        <button class="carousel-btn prev-btn" onclick="moveCarousel(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="carousel-btn next-btn" onclick="moveCarousel(1)"><i class="fa-solid fa-chevron-right"></i></button>
+        
+        <div class="carousel-wrapper">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-item">
+                    <div class="featured-card">
+                        <span class="badge">Campeão</span>
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60" alt="Monster Burger">
+                        <div class="card-body">
+                            <h3>Monster Burger</h3>
+                            <p>Dois blends de 180g, muito bacon crocante, cheddar duplo derretido e molho da casa.</p>
+                            <div class="price-tag">R$ 38,90</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="featured-card">
+                        <span class="badge">Novo</span>
+                        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&auto=format&fit=crop&q=60" alt="Cheddar Supreme">
+                        <div class="card-body">
+                            <h3>Cheddar Supreme</h3>
+                            <p>Blend 150g envelopado em uma piscina de queijo cheddar cremoso e cebola caramelizada.</p>
+                            <div class="price-tag">R$ 34,90</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="featured-card">
+                        <span class="badge">Premium</span>
+                        <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=500&auto=format&fit=crop&q=60" alt="Smash Bacon">
+                        <div class="card-body">
+                            <h3>Smash Bacon Extra</h3>
+                            <p>Dois blends smash prensados na chapa, queijo prato, cebola roxa e muito bacon.</p>
+                            <div class="price-tag">R$ 29,90</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="featured-card">
+                        <span class="badge">Sucesso</span>
+                        <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&auto=format&fit=crop&q=60" alt="Classic Master">
+                        <div class="card-body">
+                            <h3>Classic Master</h3>
+                            <p>O clássico perfeito: Blend caseiro de 160g, alface fresca, tomate, picles e maionese verde.</p>
+                            <div class="price-tag">R$ 26,90</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="search-filter-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar produto..." onkeyup="filterProducts()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterCategory('todos')">Todos</button>
+            <button class="filter-btn" onclick="filterCategory('artesanal')">Artesanais</button>
+            <button class="filter-btn" onclick="filterCategory('smash')">Smashes</button>
+            <button class="filter-btn" onclick="filterCategory('acompanhamentos')">Porções</button>
+            <button class="filter-btn" onclick="filterCategory('bebidas')">Bebidas</button>
+            <button class="filter-btn" onclick="filterCategory('sobremesas')">Sobremesas</button>
+        </div>
+    </div>
+
+    <main class="catalog-container">
+        <h2 class="section-title"><i class="fa-solid fa-utensils"></i> Nosso Cardápio</h2>
+        <div class="products-grid" id="catalogGrid">
+            </div>
+    </main>
+
+    <a href="https://wa.me/5500999999999" class="whatsapp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="tooltip">Faça seu Pedido!</span>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Burger Master - Todos os direitos reservados.</p>
+        <p style="font-size: 0.75rem; margin-top: 5px;">Imagens ilustrativas para exibição de catálogo.</p>
+    </footer>
+
+    <script>
+        // Array com 20 Produtos para o Catálogo Geral
+        const produtos = [
+            { id: 1, nome: "Double Cheese", categoria: "artesanal", preco: 31.90, desc: "Dois blends de 120g e quatro fatias de queijo cheddar perfeitamente derretidos.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&auto=format&fit=crop&q=60" },
+            { id: 2, nome: "Crispy Chicken", categoria: "artesanal", preco: 28.90, desc: "Frango super crocante empanado, alface americana, maionese e picles no pão brioche.", img: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=400&auto=format&fit=crop&q=60" },
+            { id: 3, nome: "Egg Burger", categoria: "artesanal", preco: 27.90, desc: "Hambúrguer 150g, ovo estalado na chapa, queijo prato, maionese artesanal e alface.", img: "/img/00130fc2b09d261f83afa498b7ea325a.jpg" },
+            { id: 4, nome: "BBQ Bacon", categoria: "artesanal", preco: 34.90, desc: "Blend de 160g, bacon crocante em tiras, queijo cheddar e muito molho barbecue.", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400&auto=format&fit=crop&q=60" },
+            { id: 5, nome: "Smash Simples", categoria: "smash", preco: 19.90, desc: "Blend smash de 90g prensado com cebola, cheddar e molho especial da casa.", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&auto=format&fit=crop&q=60" },
+            { id: 6, nome: "Smash Duplo", categoria: "smash", preco: 24.90, desc: "Dois blends smash de 90g, queijo cheddar duplo e picles artesanal.", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=400&auto=format&fit=crop&q=60" },
+            { id: 7, nome: "Smash Salada", categoria: "smash", preco: 22.90, desc: "Blend smash de 90g, queijo, alface, tomate e maionese tradicional.", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&auto=format&fit=crop&q=60" },
+            { id: 8, nome: "Gorgonzola Burger", categoria: "artesanal", preco: 36.90, desc: "Blend de 160g, creme de queijo gorgonzola marcante e cebola caramelizada.", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=400&auto=format&fit=crop&q=60" },
+            { id: 9, nome: "Batata Frita Tradicional", categoria: "acompanhamentos", preco: 14.90, desc: "Batatas fritas super crocantes por fora e macias por dentro, temperadas com sal.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&auto=format&fit=crop&q=60" },
+            { id: 10, nome: "Batata Suprema Cheddar", categoria: "acompanhamentos", preco: 22.90, desc: "Porção generosa de batatas fritas cobertas com cheddar cremoso e bacon picado.", img: "https://images.unsplash.com/photo-1585109649139-366815a0d713?w=400&auto=format&fit=crop&q=60" },
+            { id: 11, nome: "Onion Rings", categoria: "acompanhamentos", preco: 16.90, desc: "Anéis de cebola gigantes empanados e fritos, super crocantes.", img: "/img/orin .jpg" },
+            { id: 12, nome: "Nuggets de Frango", categoria: "acompanhamentos", preco: 18.90, desc: "10 unidades de nuggets de frango acompanhados de molho barbecue.", img: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&auto=format&fit=crop&q=60" },
+            { id: 13, nome: "Coca-Cola Lata", categoria: "bebidas", preco: 6.00, desc: "Lata de 350ml trincando de gelada.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&auto=format&fit=crop&q=60" },
+            { id: 14, nome: "Guaraná Antarctica", categoria: "bebidas", preco: 6.00, desc: "Lata de 350ml trincando de gelada.", img: "https://images.unsplash.com/photo-1624517452488-04869289c4ca?w=400&auto=format&fit=crop&q=60" },
+            { id: 15, nome: "Suco Natural de Laranja", categoria: "bebidas", preco: 9.90, desc: "Suco natural feito na hora com laranjas selecionadas 400ml.", img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&auto=format&fit=crop&q=60" },
+            { id: 16, nome: "Água Mineral", categoria: "bebidas", preco: 4.50, desc: "Garrafa de 500ml com ou sem gás.", img: "/img/águamineral.jpg" },
+            { id: 17, nome: "Brownie com Sorvete", categoria: "sobremesas", preco: 18.90, desc: "Brownie de chocolate morno com uma bola de sorvete de creme e calda.", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&auto=format&fit=crop&q=60" },
+            { id: 18, nome: "Milkshake Ovomaltine", categoria: "sobremesas", preco: 16.90, desc: "Milkshake ultra cremoso de chocolate batido com Ovomaltine crocante.", img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&auto=format&fit=crop&q=60" },
+            { id: 19, nome: "Mini Churros", categoria: "sobremesas", preco: 14.90, desc: "6 unidades de mini churros recheados com doce de leite quente.", img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=400&auto=format&fit=crop&q=60" },
+            { id: 20, nome: "Pudim Caseiro", categoria: "sobremesas", preco: 10.90, desc: "Pudim de leite condensado super liso com calda de caramelo tradicional.", img: "https://images.unsplash.com/photo-1528975604071-b4dc52a2d18c?w=400&auto=format&fit=crop&q=60" }
+        ];
+
+        // Inicializar e Renderizar os Produtos no Grid
+        function renderProducts(lista) {
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = '';
+            
+            if(lista.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted); padding: 40px;">Nenhum produto encontrado...</p>`;
+                return;
+            }
+
+            lista.forEach(prod => {
+                const card = `
+                    <div class="product-card" data-category="${prod.categoria}">
+                        <img src="${prod.img}" alt="${prod.nome}">
+                        <div class="card-body">
+                            <h3>${prod.nome}</h3>
+                            <p>${prod.desc}</p>
+                            <div class="price-tag">R$ ${prod.preco.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        // Sistema de Filtro por Categoria
+        function filterCategory(category) {
+            // Atualiza botões ativos
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if(category === 'todos') {
+                renderProducts(produtos);
+            } else {
+                const filtrados = produtos.filter(p => p.categoria === category);
+                renderProducts(filtrados);
+            }
+            document.getElementById('searchInput').value = ''; // Limpa busca ao filtrar por categoria
+        }
+
+        // Sistema de Busca em Tempo Real
+        function filterProducts() {
+            const searchTxt = document.getElementById('searchInput').value.toLowerCase();
+            const filtrados = produtos.filter(p => 
+                p.nome.toLowerCase().includes(searchTxt) || 
+                p.desc.toLowerCase().includes(searchTxt)
+            );
+            renderProducts(filtrados);
+        }
+
+        // Lógica de Rolagem do Carrossel de Destaques
+        let currentIdx = 0;
+        function moveCarousel(direction) {
+            const track = document.getElementById('carouselTrack');
+            const items = document.querySelectorAll('.carousel-item');
+            const totalItems = items.length;
+            
+            // Define quantos itens aparecem por vez baseado na tela
+            let itemsPerView = 1;
+            if (window.innerWidth >= 1024) itemsPerView = 4;
+            else if (window.innerWidth >= 768) itemsPerView = 2;
+
+            const maxIdx = totalItems - itemsPerView;
+            currentIdx += direction;
+
+            if (currentIdx < 0) currentIdx = 0;
+            if (currentIdx > maxIdx) currentIdx = maxIdx;
+
+            const amountToMove = items[0].getBoundingClientRect().width * currentIdx;
+            track.style.transform = `translateX(-${amountToMove}px)`;
+        }
+
+        // Ajustar carrossel caso a janela mude de tamanho de forma responsiva
+        window.addEventListener('resize', () => {
+            document.getElementById('carouselTrack').style.transform = `translateX(0px)`;
+            currentIdx = 0;
+        });
+
+        // Carregamento Inicial
+        window.onload = () => {
+            renderProducts(produtos);
+        };
+    </script>
+</body>
+</html>
